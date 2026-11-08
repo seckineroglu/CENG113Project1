@@ -5,7 +5,10 @@ def select_department():
     #validate and return a choice from 1 to 6
     return
 def display_employees(department):
-    #display the employees in the selected department
+    
+    
+    with open("employees.txt","r"):
+
     return
 def assaign_weekly_tasks(department):
     #collect and save weekly tasks,,
@@ -30,3 +33,17 @@ def display_task_summary(department):
 def main():
     #run the menu loop and call other functions
     return
+def department_selection_validation()
+    try:
+        chosenDepartment=int(input("Please select a department(1-6)"))
+    except ValueError:
+        print("Department selection must be an integer! Please try again.")
+        department_selection_validation()
+    if (0<=chosenDepartment<=chosenDepartment):
+        return chosenDepartment
+    else:
+        print("Invalid Department number! Please enter a number between 1-6")
+        department_selection_validation()
+    
+
+    
