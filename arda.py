@@ -4,6 +4,7 @@ def display_menu():
         userMenuChoice:int=int(input("Please choose an option to display:"))
     except ValueError:
         print("Choice must be an integer!Please try again.")
+        display_menu()
     if(userMenuChoice==0):# type: ignore # 0. Exit
         #impelement exiting
         return
@@ -19,7 +20,9 @@ def display_menu():
         review_meeting_report(select_department())
     elif(userMenuChoice==6): # Display task summary
         display_task_summary(select_department())
-
+    else:
+        print("Invalid menu number! Please try again.")
+        display_menu()
         
     return
 def select_department():
@@ -28,18 +31,19 @@ def select_department():
     except ValueError: 
         print("Department selection must be an integer! Please try again.")
         select_department()
-    if (0<=chosenDepartment<=chosenDepartment):
+    if (0<=chosenDepartment<=6):
             return chosenDepartment # type: ignore
     else:
         print("Invalid Department number! Please enter a number between 1-6")
         select_department()
 def display_employees(department):
+    requestedDepartment = get_department_name(department)
     try:
         with open("employees.txt", "r") as file:
             while True:
                 # Read one full record (6 lines)
                 emp_id = file.readline().strip()
-                if emp_id == "":          # end of file reached
+                if emp_id == "":# end of file reached
                     break
                 name = file.readline().strip()
                 surname = file.readline().strip()
@@ -47,6 +51,8 @@ def display_employees(department):
                 dept = file.readline().strip()
                 role = file.readline().strip()
                 file.readline()
+                if(dept==requestedDepartment):
+                    print(f"{name},{surname},{title},{dept},{role}")
     except FileNotFoundError:
         print("The Employees file wasn't found!")
     return
@@ -56,6 +62,35 @@ def assaign_weekly_tasks(department):
     return 
 def generate_meeting_report(department):
     #collect missing meeting metadata and build the report
+    departmentReportNumber = select_department(department)
+    departmentName = get_department_name(department)
+    try:
+        with open(f"task_{departmentReportNumber}.txt", "r") as taskFile:
+            emp_id = taskFile.readline().strip()
+            emp_task = taskFile.readline().strip()
+            emp_task_hour = taskFile.readline().strip()
+            taskFile.readline()
+
+            if emp_id or emp_task or emp_task_hour == "":
+                print("Task file is incomplete!")
+                return
+            else:
+                meeting_date = input("Please enter a date for the meeting. Use the format YYYY/MM/DD: ")
+                meeting_note = input("Please enter a note for the meeting: ")
+
+        with open(f"review_{departmentReportNumber}.txt", "w") as reviewFile:
+            reviewFile.write("Pending Approval", "\n", "-", "\n", "-", "\n", "-", "\n", meeting_date, "\n", meeting_note)
+            
+        with open(f"meeting_report_{departmentReportNumber}.txt", "w") as reportFile:
+            reportFile.write(f"----- MEETING REPORT -----", "\n")
+            reportFile.write(f"Department: {departmentName}", "\n", f"Meeting Date: {meeting_date}", 
+                             "\n", f"Meeting Note: {meeting_note}", "\n", f"Status: ", "\n")
+
+
+    except FileNotFoundError:
+        print("There is no task assigned for this department yet.")
+        return
+    
     return
 def display_meeting_report(department):
     #display the report or explain that none exsists
@@ -73,7 +108,19 @@ def display_task_summary(department):
 def main():
     #run the menu loop and call other functions
     return
-
-display_employees(1)
+def get_department_name(department):
+    if(department==1):
+        return "Software Development"
+    elif(department==2):
+        return "Artificial Intelligence"
+    elif(department==3):
+        return "Research and Development"
+    elif(department==4):
+        return "Quality Assurance"
+    elif(department==5):
+        return "IT Operations"
+    elif(department==6):
+        return "Human Resources"
+display_menu()
 
     
