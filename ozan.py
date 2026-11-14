@@ -109,42 +109,102 @@ def authenticate_manager(manager_id, password, department):
     # Both checks must pass
     return is_valid_manager and password_matches
 def review_meeting_report(department):
-    # Build the review file name from the department number (e.g. review_1.txt)
     review_file_name = f"review_{department}.txt"
 
+    # Read review file to check status and preserve meeting date/note
     try:
-        # Read only the first line of the file, which is the status
         with open(review_file_name, "r") as file:
             status = file.readline().strip()
+            file.readline()  # reviewer id
+            file.readline()  # reviewer name
+            file.readline()  # comment
+            meeting_date = file.readline().strip()
+            meeting_note = file.readline().strip()
     except FileNotFoundError:
-        # No review file means no report has been generated yet
         print("No meeting report exists for this department yet.")
         return
 
-    # Only a report that is waiting for approval can be reviewed
+    # Only Pending Approval reports can be reviewed
     if status != "Pending Approval":
-        print(f"This report is already {status}. ")
+        print(f"This report is already {status}.")
         return
-    elif status == "Pending Approval":
-        print("This report is waiting for approval. ")
 
-    # Login attempts: manager gets 3 tries
+    # Manager login - 3 attempts
     attempts = 0
     while attempts < 3:
         manager_id = input("Enter your manager ID: ")
         password = input("Enter your password: ")
         if authenticate_manager(manager_id, password, department):
-            print("Login successful!")
-            # TODO: approve or reject the report
-            return
+            break
+        attempts += 1
+        if attempts < 3:
+            print("Invalid manager ID or password, or unauthorized department.")
         else:
-            attempts += 1
-            remaining = 3 - attempts
-            if remaining > 0:
-                print(f"Login failed! You have {remaining} attempt(s) left.")
-            else:
-                print("Login failed! No attempts remaining. Returning to menu.")
-    return
+            print("Invalid manager ID or password, or unauthorized department.")
+            print("No attempts remaining. Returning to menu.")
+            return
+
+    # Get reviewer full name from employees.txt
+    reviewer_name = ""
+    try:
+        with open("employees.txt", "r") as file:
+            while True:
+                emp_id = file.readline().strip()
+                if emp_id == "":
+                    break
+                name = file.readline().strip()
+                surname = file.readline().strip()
+                file.readline()  # title
+                file.readline()  # department
+                file.readline()  # role
+                file.readline()  # empty line
+                if emp_id == manager_id:
+                    reviewer_name = name + " " + surname
+    except FileNotFoundError:
+        print("The employees file was not found!")
+        return
+
+    # Display the current report
+    try:
+        with open(f"meeting_report_{department}.txt", "r") as file:
+            while True:
+                line = file.readline()
+                if line == "":
+                    break
+                print(line, end="")
+    except FileNotFoundError:
+        print("Meeting report file not found!")
+        return
+
+    # Ask for decision
+    print("\n1. Approve  2. Reject  3. Cancel")
+    decision = input("Enter your decision (1-3): ")
+
+    if decision == "1":
+        comment = input("Enter approval comment (or press Enter to skip): ")
+        if comment.strip() == "":
+            comment = "-"
+        new_status = "Approved"
+    elif decision == "2":
+        comment = ""
+        while comment.strip() == "":
+            comment = input("Enter rejection comment (required): ")
+            if comment.strip() == "":
+                print("Rejection comment cannot be empty!")
+        new_status = "Rejected"
+    else:
+        print("No changes made.")
+        return
+
+    # Save updated review file
+    with open(review_file_name, "w") as file:
+        file.write(new_status + "\n")
+        file.write(manager_id + "\n")
+        file.write(reviewer_name + "\n")
+        file.write(comment + "\n")
+        file.write(meeting_date + "\n")
+        file.write(meeting_note + "\n")
+    print(f"Report {new_status.lower()} successfully.")
 def display_task_summary(department):
     #calculate and display counts total hours and average
     return
