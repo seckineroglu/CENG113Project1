@@ -37,6 +37,7 @@ def select_department():
         print("Invalid Department number! Please enter a number between 1-6")
         select_department()
 def display_employees(department):
+    requestedDepartment = get_department_name(department)
     try:
         with open("employees.txt", "r") as file:
             while True:
@@ -50,7 +51,7 @@ def display_employees(department):
                 dept = file.readline().strip()
                 role = file.readline().strip()
                 file.readline()
-                if(dept=="Software Development"):
+                if(dept==requestedDepartment):
                     print(f"{name},{surname},{title},{dept},{role}")
     except FileNotFoundError:
         print("The Employees file wasn't found!")
@@ -78,7 +79,19 @@ def display_task_summary(department):
 def main():
     #run the menu loop and call other functions
     return
-
+def get_department_name(department):
+    if(department==1):
+        return "Software Development"
+    elif(department==2):
+        return "Artificial Intelligence"
+    elif(department==3):
+        return "Research and Development"
+    elif(department==4):
+        return "Quality Assurance"
+    elif(department==5):
+        return "IT Operations"
+    elif(department==6):
+        return "Human Resources"
 display_menu()
 
     
