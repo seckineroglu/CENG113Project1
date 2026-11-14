@@ -173,3 +173,5 @@ def get_employee_amount(department)->int:
         return 7
     else:
         return -1
+
+assaign_weekly_tasks(2)
