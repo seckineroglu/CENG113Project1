@@ -84,7 +84,35 @@ def generate_meeting_report(department):
         with open(f"meeting_report_{departmentReportNumber}.txt", "w") as reportFile:
             reportFile.write(f"----- MEETING REPORT -----", "\n")
             reportFile.write(f"Department: {departmentName}", "\n", f"Meeting Date: {meeting_date}", 
-                             "\n", f"Meeting Note: {meeting_note}", "\n", f"Status: ", "\n")
+                            "\n", f"Meeting Note: {meeting_note}", "\n", f"Status: ", "\n", f"Employee Task: ", "\n")
+            try:
+                while True:
+                    with open("employees.txt", "r") as employeeContentFile:
+                        # Read one full record (6 lines)
+                        emp_content_id = employeeContentFile.readline().strip()
+                        if emp_id == "":# end of file reached
+                            break
+                        content_name = employeeContentFile.readline().strip()
+                        content_surname = employeeContentFile.readline().strip()
+                        content_title = employeeContentFile.readline().strip()
+                        content_dept = employeeContentFile.readline().strip()
+                        content_role = employeeContentFile.readline().strip()
+                        employeeContentFile.readline()
+                        with open(f"task_{departmentReportNumber}.txt", "r") as taskContentFile:
+                            task_id = taskContentFile.readline().strip()
+                            task = taskContentFile.readline().strip()
+                            task_hour = taskContentFile.readline().strip()
+                            taskContentFile.readline()
+
+                        if content_dept == departmentName:
+                            reportFile.write(f"{emp_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}.", "\n")
+                        
+            except FileNotFoundError:
+                print("File not found!")
+
+            reportFile.write(f"")
+
+
 
 
     except FileNotFoundError:
