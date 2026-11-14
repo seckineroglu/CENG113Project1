@@ -87,9 +87,11 @@ def assaign_weekly_tasks(department):
     return 
 def generate_meeting_report(department):
     #collect missing meeting metadata and build the report
+    #done by arda
     return
 def display_meeting_report(department):
     #display the report or explain that none exsists
+    #done by deniz
     return
 def authenticate_manager(manager_id,password,department):
     #return true only when all authentication checks pass
@@ -97,9 +99,26 @@ def authenticate_manager(manager_id,password,department):
 def review_meeting_report(department):
     #handle login attempts
     #decision input and report updates
+    #done by ozan
     return
 def display_task_summary(department):
-    #calculate and display counts total hours and average
+    total_hours=0
+    average_hours=0
+    emptyString=""
+    try:
+        with open(f"task_{department}.txt","r") as task:
+            while True:
+                ID=task.readline().strip()
+                if(ID==emptyString):
+                    break
+                description=task.readline().strip()
+                hour=int(task.readline().strip())
+                task.readline().strip()
+                total_hours=total_hours + hour
+        average_hours = total_hours / get_employee_amount(department)
+        print(f"Department employee amount:{get_employee_amount(department)}\nNumber of assigned tasks:{get_employee_amount(department)}\nTotal estimated hours:{total_hours}\nAverage estimated hours:{average_hours}")
+    except FileNotFoundError:
+        print(f"Assaigned Tasks:0,Total hours:0,Average Time:N/A")
     return
 def main():
     #run the menu loop and call other functions
@@ -138,8 +157,19 @@ def estimated_hours_validation():
         except ValueError:
             print("Estimated hours must be an integer! Please try again")
     return estimatedHours
+def get_employee_amount(department)->int:
 
-
-assaign_weekly_tasks(2)
-
-    
+    if department==1:
+        return 10
+    elif department==2:
+        return 9
+    elif department==3:
+        return 8
+    elif department==4:
+        return 8
+    elif department==5:
+        return 8
+    elif department==6:
+        return 7
+    else:
+        return -1
