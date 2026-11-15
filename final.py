@@ -2,7 +2,7 @@ def display_menu():
     #display the main menu
     while True:
         try:
-            print("1-)Display Employees\n2-Assign Weekly Tasks\n3-)Generate Meeting Report\n4-)Display Meeting Report\n5-)Review Meeting Report\n6-)Display Task Summary\n0-)Exit")
+            print("1-)Display Employees\n2)-Assign Weekly Tasks\n3-)Generate Meeting Report\n4-)Display Meeting Report\n5-)Review Meeting Report\n6-)Display Task Summary\n0-)Exit")
             userMenuChoice:int=int(input("Please choose an option to display:"))
             break
         except ValueError:
@@ -28,16 +28,15 @@ def display_menu():
         
     return
 def select_department():
-    try:
-        chosenDepartment:int=int(input("Please select a department(1-6)"))
-    except ValueError: 
-        print("Department selection must be an integer! Please try again.")
-        select_department()
-    if (0<chosenDepartment<=6): # type: ignore
-            return chosenDepartment # type: ignore
-    else:
-        print("Invalid Department number! Please enter a number between 1-6")
-        select_department()
+    while True:
+        try:
+            chosenDepartment=int(input("Please select a department(1-6):"))
+        except ValueError:
+            print("Department number must be an integer! Please try again.")
+        if(0<chosenDepartment<=6):
+            return chosenDepartment
+        else:
+            print("Department number must be between 1-6.Please try again.")
 def display_employees(department):
     requestedDepartment = get_department_name(department)
     try:
@@ -99,7 +98,7 @@ def generate_meeting_report(department):
             while True:
                 emp_id = taskFile.readline().strip()
                 emp_task = taskFile.readline().strip()
-                emp_task_hour = int(taskFile.readline().strip())
+                emp_task_hour = taskFile.readline().strip()
                 if emp_id == "" and emp_task == "" and emp_task_hour =="":
                     break
                 elif emp_id == "" or emp_task == "" or emp_task_hour == "":
@@ -107,7 +106,7 @@ def generate_meeting_report(department):
                     return
                 else:
                     try:
-                        if 1 <= emp_task_hour <= 40:
+                        if 1 <= int(emp_task_hour) <= 40:
                             total_estimated_hour += int(emp_task_hour)
                         else:
                             print("Please check the file, some estimated hour values might be wrong.")
@@ -149,8 +148,8 @@ def generate_meeting_report(department):
                         task = taskContentFile.readline().strip()
                         task_hour = taskContentFile.readline().strip()
                         taskContentFile.readline()
-                if content_dept == departmentName:
-                    reportFile.write(f"{emp_content_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}\n")
+                if content_dept == departmentName: # type: ignore
+                    reportFile.write(f"{emp_content_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}\n") # type:ignore
         except FileNotFoundError:
             print("Employee file not found!")
         reportFile.write(f"Number of Employees: {employeeNumber}\nTotal Estimated Hours: {total_estimated_hour}\nAverage Estimated Hours: {average_estimated_hour:.2f}\n")
@@ -159,7 +158,6 @@ def generate_meeting_report(department):
     return
 def display_meeting_report(department):
     # display the report or explain that none exists
-
     filename = f"meeting_report_{department}.txt"
     try:
         # Open the report in the read mode and print each line until lines finish.
@@ -168,19 +166,139 @@ def display_meeting_report(department):
             while line != "":
                 print(line, end="")
                 line = file.readline()
+        print()
     except FileNotFoundError:
         # Inform the user that if the meeting report did not get generated yet
         print("No meeting report found in this department")
-
     return
-def authenticate_manager(manager_id,password,department):
-    #return true only when all authentication checks pass
-    return
+def authenticate_manager(manager_id, password, department):
+    # Return True only when all authentication checks pass
+    department_name = get_department_name(department)
+    is_valid_manager = False
+    password_matches = False
+    # Check 1: ID exists, role is Manager, manager belongs to this department
+    try:
+        with open("employees.txt", "r") as file:
+            while True:
+                emp_id = file.readline().strip()
+                if emp_id == "":  # end of file reached
+                    break
+                file.readline()  # name (not needed)
+                file.readline()  # surname (not needed)
+                file.readline()  # title (not needed)
+                dept = file.readline().strip()
+                role = file.readline().strip()
+                file.readline()  # empty line between records
+                if emp_id == manager_id and role == "Manager" and dept == department_name:
+                    is_valid_manager = True
+    except FileNotFoundError:
+        print("The employees file was not found!")
+        return False
+    # Check 2: ID and password match a record in manager_passwords.txt
+    try:
+        with open("manager_passwords.txt", "r") as file:
+            while True:
+                file_id = file.readline().strip()
+                if file_id == "":  # end of file reached
+                    break
+                file_password = file.readline().strip()
+                file.readline()  # empty line between records
+                if file_id == manager_id and file_password == password:
+                    password_matches = True
+    except FileNotFoundError:
+        print("The manager passwords file was not found!")
+        return False
+    # Both checks must pass
+    return is_valid_manager and password_matches
 def review_meeting_report(department):
-    #handle login attempts
-    #decision input and report updates
-    #done by ozan
-    return
+    review_file_name = f"review_{department}.txt"
+    # Read review file to check status and preserve meeting date/note
+    try:
+        with open(review_file_name, "r") as file:
+            status = file.readline().strip()
+            file.readline()  # reviewer id
+            file.readline()  # reviewer name
+            file.readline()  # comment
+            meeting_date = file.readline().strip()
+            meeting_note = file.readline().strip()
+    except FileNotFoundError:
+        print("No meeting report exists for this department yet.")
+        return
+    # Only Pending Approval reports can be reviewed
+    if status != "Pending Approval":
+        print(f"This report is already {status}.")
+        return
+    # Manager login - 3 attempts
+    attempts = 0
+    while attempts < 3:
+        manager_id = input("Enter your manager ID:")
+        password = input("Enter your password:")
+        if authenticate_manager(manager_id, password, department):
+            break
+        attempts += 1
+        if attempts < 3:
+            print("Invalid manager ID or password, or unauthorized department.")
+        else:
+            print("Invalid manager ID or password, or unauthorized department.")
+            print("No attempts remaining. Returning to menu.")
+            return
+    # Get reviewer full name from employees.txt
+    reviewer_name = ""
+    try:
+        with open("employees.txt", "r") as file:
+            while True:
+                emp_id = file.readline().strip()
+                if emp_id == "":
+                    break
+                name = file.readline().strip()
+                surname = file.readline().strip()
+                file.readline()  # title
+                file.readline()  # department
+                file.readline()  # role
+                file.readline()  # empty line
+                if emp_id == manager_id: #type: ignore
+                    reviewer_name = name + " " + surname
+    except FileNotFoundError:
+        print("The employees file was not found!")
+        return
+    # Display the current report
+    try:
+        with open(f"meeting_report_{department}.txt", "r") as file:
+            while True:
+                line = file.readline()
+                if line == "":
+                    break
+                print(line, end="")
+    except FileNotFoundError:
+        print("Meeting report file not found!")
+        return
+    # Ask for decision
+    print("\n1. Approve  2. Reject  3. Cancel")
+    decision = input("Enter your decision (1-3): ")
+    if decision == "1":
+        comment = input("Enter approval comment (or press Enter to skip): ")
+        if comment.strip() == "":
+            comment = "-"
+        new_status = "Approved"
+    elif decision == "2":
+        comment = ""
+        while comment.strip() == "":
+            comment = input("Enter rejection comment (required): ")
+            if comment.strip() == "":
+                print("Rejection comment cannot be empty!")
+        new_status = "Rejected"
+    else:
+        print("No changes made.")
+        return
+# Save updated review file
+    with open(review_file_name, "w") as file:
+        file.write(new_status + "\n")
+        file.write(manager_id + "\n") #type: ignore
+        file.write(reviewer_name + "\n")
+        file.write(comment + "\n")
+        file.write(meeting_date + "\n")
+        file.write(meeting_note + "\n")
+    print(f"Report {new_status.lower()} successfully.")
 def display_task_summary(department):
     total_hours=0
     average_hours=0

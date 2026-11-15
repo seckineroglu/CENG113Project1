@@ -1,0 +1,13 @@
+----- MEETING REPORT -----
+Department: Human Resources
+Meeting Date: 1234/12/23
+Meeting Note: meeting went well
+Status: Pending Approval
+Employee Task: 
+ | Lara Yilmaz | Training Specialist | arda | 20
+Number of Employees: 7
+Total Estimated Hours: 152
+Average Estimated Hours: 21.71
+Reviewer ID              -   
+Reviewer Name                -   
+Review Comment               -   
