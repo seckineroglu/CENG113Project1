@@ -121,23 +121,9 @@ def generate_meeting_report(department):
                 return
             else:
                 average_estimated_hour = total_estimated_hour / total_task_number
-        useTemp=False
-        try:
-            with open(f"meeting_report_{departmentReportNumber}.txt","r") as temp:
-                if(temp.readline()=="Rejected"):
-                    temp.readline()
-                    temp.readline()
-                    temp.readline()
-                    tempDate=temp.readline()
-                    tempDescription=temp.readline()
-                    useTemp:bool=True
-        except:
-            pass
-        if(useTemp==True):
-            meeting_date=tempDate
-            meeting_note=tempDescription
         meeting_date = input("Please enter a date for the meeting. Use the format YYYY/MM/DD: ")
         meeting_note = input("Please enter a note for the meeting: ")
+
         with open(f"review_{departmentReportNumber}.txt", "w") as reviewFile:
             reviewFile.write(f"Pending Approval\n-\n-\n-\n{meeting_date}\n{meeting_note}")
         with open(f"meeting_report_{departmentReportNumber}.txt", "w") as reportFile:
@@ -171,6 +157,60 @@ def generate_meeting_report(department):
             except FileNotFoundError:
                 print("Employee file not found!")
             return
+        useTemp=False
+        try:
+            with open(f"review_{departmentReportNumber}.txt","r") as temp:
+                if(temp.readline().strip()=="Rejected"):
+                    temp.readline()
+                    temp.readline()
+                    temp.readline()
+                    tempDate=temp.readline().strip()
+                    tempDescription=temp.readline().strip()
+                    useTemp:bool=True
+                else:
+                    pr
+                    #here !!!     
+            if(useTemp==True):
+                meeting_date = tempDate
+                meeting_note = tempDescription
+            with open(f"meeting_report_{departmentReportNumber}.txt", "w") as regenerated_reportFile:
+                regenerated_reportFile.write(f"----- MEETING REPORT -----\n")
+                regenerated_reportFile.write(f"Department: {departmentName}\nMeeting Date: {meeting_date}\nMeeting Note: {meeting_note}\nStatus: Pending Approval\nEmployee Task: \n")
+                try:
+                    with open("employees.txt", "r") as employeeContentFile:
+                        with open(f"tasks_{departmentReportNumber}.txt", "r") as taskContentFile:
+                            while True:
+                                # Read one full record (6 lines)
+                                emp_content_id = employeeContentFile.readline().strip()
+                                if emp_content_id == "":# end of file reached
+                                    break
+                                content_name = employeeContentFile.readline().strip()
+                                content_surname = employeeContentFile.readline().strip()
+                                content_title = employeeContentFile.readline().strip()
+                                content_dept = employeeContentFile.readline().strip()
+                                content_role = employeeContentFile.readline().strip()
+                                employeeContentFile.readline()
+                                if(content_dept!=departmentName):
+                                    continue
+                                task_id = taskContentFile.readline().strip()
+                                task = taskContentFile.readline().strip()
+                                task_hour = taskContentFile.readline().strip()
+                                taskContentFile.readline()
+                                if content_dept == departmentName: # type: ignore
+                                    regenerated_reportFile.write(f"{emp_content_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}\n") # type:ignore
+
+                    regenerated_reportFile.write(f"Number of Employees: {employeeNumber}\nTotal Estimated Hours: {total_estimated_hour}\nAverage Estimated Hours: {average_estimated_hour:.2f}\n")
+                    regenerated_reportFile.write(f"Reviewer ID                  -   \nReviewer Name                -   \nReview Comment               -   ")
+                except FileNotFoundError:
+                    print("Employee file not found!")
+                return
+            with open(f"review_{departmentReportNumber}.txt", "w") as regenerated_reviewFile:
+                regenerated_reviewFile.write(f"Pending Approval\n-\n-\n-\n{meeting_date}\n{meeting_note}")
+
+        except:
+            pass
+        
+
         
     except FileNotFoundError:
         print("There is no task assigned for this department yet.")
