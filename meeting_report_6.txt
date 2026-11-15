@@ -1,19 +1,19 @@
 ----- MEETING REPORT -----
 Department: Human Resources
-Meeting Date: 1234/12/34
-Meeting Note: aa
+Meeting Date: 3131/31/31
+Meeting Note: asdasdasfg
 Status: Pending Approval
 Employee Task: 
-1044 | Simge Altun | Human Resources Manager | arda | 20
-1045 | Oguz Duran | Recruitment Specialist | ozan | 21
-1046 | Beste Uysal | HR Specialist | seckin | 22
-1047 | Yigit Erol | Training Specialist | deniz | 23
-1048 | Ilayda Genc | HR Specialist | elifsu | 24
-1049 | Engin Uzun | Recruitment Specialist | birsu | 12
-1050 | Lara Yilmaz | Training Specialist | lllllllllllll | 30
+1044 | Simge Altun | Human Resources Manager | 31 | 31
+1045 | Oguz Duran | Recruitment Specialist | 31 | 31
+1046 | Beste Uysal | HR Specialist | 31 | 31
+1047 | Yigit Erol | Training Specialist | 31 | 31
+1048 | Ilayda Genc | HR Specialist | 31 | 31
+1049 | Engin Uzun | Recruitment Specialist | 31 | 31
+1050 | Lara Yilmaz | Training Specialist | 31 | 31
 Number of Employees: 7
-Total Estimated Hours: 152
-Average Estimated Hours: 21.71
+Total Estimated Hours: 217
+Average Estimated Hours: 31.00
 Reviewer ID                  -   
 Reviewer Name                -   
 Review Comment               -   

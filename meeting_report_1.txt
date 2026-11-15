@@ -1,0 +1,22 @@
+----- MEETING REPORT -----
+Department: Software Development
+Meeting Date: 1221/12/12
+Meeting Note: asfsgddhd
+Status: Pending Approval
+Employee Task: 
+1001 | Deniz Kaya | Software Development Manager | asd | 11
+1002 | Ayse Yilmaz | Backend Developer | asd | 11
+1003 | Emre Demir | Frontend Developer | asd | 33
+1004 | Selin Celik | Mobile Developer | qwrqrqw | 37
+1005 | Can Sahin | Software Developer | rfhdhfd | 11
+1006 | Ece Yildiz | Backend Developer | lllll | 20
+1007 | Burak Aydin | Frontend Developer | kkKKKk | 3
+1008 | Derya Arslan | Mobile Developer | lll | 7
+1009 | Mert Dogan | Software Developer | aann | 29
+1010 | Irem Kilic | Software Developer | asda | 21
+Number of Employees: 10
+Total Estimated Hours: 183
+Average Estimated Hours: 18.30
+Reviewer ID                  -   
+Reviewer Name                -   
+Review Comment               -   

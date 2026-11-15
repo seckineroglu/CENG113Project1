@@ -33,8 +33,8 @@ def select_department():
             chosenDepartment=int(input("Please select a department(1-6):"))
         except ValueError:
             print("Department number must be an integer! Please try again.")
-        if(0<chosenDepartment<=6):
-            return chosenDepartment
+        if(0<chosenDepartment<=6):#type:ignore
+            return chosenDepartment#type:ignore
         else:
             print("Department number must be between 1-6.Please try again.")
 def display_employees(department):
@@ -121,12 +121,25 @@ def generate_meeting_report(department):
                 return
             else:
                 average_estimated_hour = total_estimated_hour / total_task_number
+        useTemp=False
+        try:
+            with open(f"meeting_report_{departmentReportNumber}.txt","r") as temp:
+                if(temp.readline()=="Rejected"):
+                    temp.readline()
+                    temp.readline()
+                    temp.readline()
+                    tempDate=temp.readline()
+                    tempDescription=temp.readline()
+                    useTemp:bool=True
+        except:
+            pass
+        if(useTemp==True):
+            meeting_date=tempDate
+            meeting_note=tempDescription
         meeting_date = input("Please enter a date for the meeting. Use the format YYYY/MM/DD: ")
         meeting_note = input("Please enter a note for the meeting: ")
-
         with open(f"review_{departmentReportNumber}.txt", "w") as reviewFile:
             reviewFile.write(f"Pending Approval\n-\n-\n-\n{meeting_date}\n{meeting_note}")
-
         with open(f"meeting_report_{departmentReportNumber}.txt", "w") as reportFile:
             reportFile.write(f"----- MEETING REPORT -----\n")
             reportFile.write(f"Department: {departmentName}\nMeeting Date: {meeting_date}\nMeeting Note: {meeting_note}\nStatus: Pending Approval\nEmployee Task: \n")
