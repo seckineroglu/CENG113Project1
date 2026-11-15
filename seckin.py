@@ -1,17 +1,19 @@
 def display_menu():
     #display the main menu
-    try:
-        userMenuChoice:int=int(input("Please choose an option to display:"))
-    except ValueError:
-        print("Choice must be an integer!Please try again.")
-        display_menu()
+    while True:
+        try:
+            print("1-)Display Employees\n2-Assign Weekly Tasks\n3-)Generate Meeting Report\n4-)Display Meeting Report\n5-)Review Meeting Report\n6-)Display Task Summary\n0-)Exit")
+            userMenuChoice:int=int(input("Please choose an option to display:"))
+            break
+        except ValueError:
+            print("Choice must be an integer!Please try again.")
     if(userMenuChoice==0):# type: ignore # 0. Exit
-        #impelement exiting
-        return
-    elif(userMenuChoice==1):# 1. Display department employees 
+        print("Exiting the program.")
+        return -1
+    elif(userMenuChoice==1):# type: ignore 1. Display department employees 
         display_employees(select_department())
     elif(userMenuChoice==2):# pyright: ignore[reportPossiblyUnboundVariable] # 2. Assign weekly tasks 
-        assaign_weekly_tasks(select_department())
+        assign_weekly_tasks(select_department())
     elif(userMenuChoice==3):# type: ignore # 3. Generate meeting report 
         generate_meeting_report(select_department())
     elif(userMenuChoice==4): # type: ignore # 4. Display meeting report 
@@ -31,7 +33,7 @@ def select_department():
     except ValueError: 
         print("Department selection must be an integer! Please try again.")
         select_department()
-    if (0<chosenDepartment<=6):
+    if (0<chosenDepartment<=6): # type: ignore
             return chosenDepartment # type: ignore
     else:
         print("Invalid Department number! Please enter a number between 1-6")
@@ -121,7 +123,9 @@ def display_task_summary(department):
         print(f"Assaigned Tasks:0,Total hours:0,Average Time:N/A")
     return
 def main():
-    #run the menu loop and call other functions
+    control=0
+    while(control!=-1):
+        control=display_menu()
     return
 def get_department_name(department):
     if(department==1):
@@ -174,4 +178,4 @@ def get_employee_amount(department)->int:
     else:
         return -1
 
-assign_weekly_tasks(2)
+main()
