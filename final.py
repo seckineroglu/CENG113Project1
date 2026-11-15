@@ -99,7 +99,7 @@ def generate_meeting_report(department):
             while True:
                 emp_id = taskFile.readline().strip()
                 emp_task = taskFile.readline().strip()
-                emp_task_hour = taskFile.readline().strip()
+                emp_task_hour = int(taskFile.readline().strip())
                 if emp_id == "" and emp_task == "" and emp_task_hour =="":
                     break
                 elif emp_id == "" or emp_task == "" or emp_task_hour == "":
