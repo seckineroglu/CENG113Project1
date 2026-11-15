@@ -145,7 +145,7 @@ def task_description_validation():
         else:
             break
     return taskDescription
-def estimated_hours_validation():s
+def estimated_hours_validation():
     while True:
         try:
             estimatedHours=int(input("Please enter an estimate of required hours:"))
