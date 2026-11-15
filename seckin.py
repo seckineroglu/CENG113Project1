@@ -56,9 +56,9 @@ def display_employees(department):
     except FileNotFoundError:
         print("The Employees file wasn't found!")
     return
-def assaign_weekly_tasks(department):
+def assign_weekly_tasks(department):
     requestedDepartment = get_department_name(department)
-    with open(f"task_{department}.txt", "w") as writeFile:
+    with open(f"tasks_{department}.txt", "w") as writeFile:
         try:
             with open("employees.txt", "r") as file:
                 while True:
@@ -73,7 +73,7 @@ def assaign_weekly_tasks(department):
                     role = file.readline().strip()
                     file.readline()
                     if(dept==requestedDepartment):
-                        print(f"Task for Department:{requestedDepartment},ID:{emp_id}")
+                        print(f"Tasks for Department:{requestedDepartment},ID:{emp_id}")
                         taskDescription=task_description_validation()
                         estimatedHours=estimated_hours_validation()
                         writeFile.write(f"{emp_id}\n")
@@ -106,7 +106,7 @@ def display_task_summary(department):
     average_hours=0
     emptyString=""
     try:
-        with open(f"task_{department}.txt","r") as task:
+        with open(f"tasks_{department}.txt","r") as task:
             while True:
                 ID=task.readline().strip()
                 if(ID==emptyString):
@@ -145,7 +145,7 @@ def task_description_validation():
         else:
             break
     return taskDescription
-def estimated_hours_validation():
+def estimated_hours_validation():s
     while True:
         try:
             estimatedHours=int(input("Please enter an estimate of required hours:"))
@@ -174,4 +174,4 @@ def get_employee_amount(department)->int:
     else:
         return -1
 
-assaign_weekly_tasks(2)
+assign_weekly_tasks(2)
