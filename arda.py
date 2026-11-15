@@ -149,6 +149,24 @@ def get_department_name(department):
         return "IT Operations"
     elif(department==6):
         return "Human Resources"
+def get_employee_amount(department)->int:
+
+    if department==1:
+        return 10
+    elif department==2:
+        return 9
+    elif department==3:
+        return 8
+    elif department==4:
+        return 8
+    elif department==5:
+        return 8
+    elif department==6:
+        return 7
+    else:
+        return -1
+
+    
 display_menu()
 
     
