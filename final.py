@@ -62,6 +62,11 @@ def display_employees(department):
 
 def assign_weekly_tasks(department):
     requestedDepartment = get_department_name(department)
+
+    if(meeting_report_status(department)!=-1):
+        print("Only rejected assaignments can be rewritten!")
+        return
+    
     with open(f"tasks_{department}.txt", "w") as writeFile:
         try:
             with open("employees.txt", "r") as file:
@@ -582,5 +587,23 @@ def get_manager_name(manager_id):
             if(int(id)==manager_id):
                 fullName=name+" "+surname
                 return fullName
+
+def meeting_report_status(department):
+    #5
+    try:
+        with open(f"meeting_report_{department}.txt","r") as file:
+            file.readline()
+            file.readline()
+            file.readline()
+            file.readline()
+            status=file.readline().strip()
+            if(status=="Status: Pending Approval"):
+                return 0
+            elif(status=="Status: Approved"):
+                return 1
+            elif(status=="Status: Rejected"):
+                return -1
+    except FileNotFoundError:
+        return 2
 
 main()
