@@ -15,7 +15,7 @@ def display_menu():
     elif(userMenuChoice==2):# pyright: ignore[reportPossiblyUnboundVariable] # 2. Assign weekly tasks 
         assign_weekly_tasks(select_department())
     elif(userMenuChoice==3):# type: ignore # 3. Generate meeting report 
-        generate_meeting_report(select_department())
+        generate_meeting_report(select_department(),read_tasks())
     elif(userMenuChoice==4): # type: ignore # 4. Display meeting report 
         display_meeting_report(select_department())
     elif(userMenuChoice==5):# 5. Review meeting report
@@ -87,134 +87,6 @@ def assign_weekly_tasks(department):
     #allow replacement of existing assaignments only after report rejection
     return 
 def generate_meeting_report(department):
-    #collect missing meeting metadata and build the report
-    departmentReportNumber = department
-    departmentName = get_department_name(department)
-    employeeNumber = get_employee_amount(department)
-    total_estimated_hour = 0
-    total_task_number = 0
-    
-    try:
-        with open(f"tasks_{departmentReportNumber}.txt", "r") as taskFile:
-            while True:
-                emp_id = taskFile.readline().strip()
-                emp_task = taskFile.readline().strip()
-                emp_task_hour = taskFile.readline().strip()
-                if emp_id == "" and emp_task == "" and emp_task_hour =="":
-                    break
-                elif emp_id == "" or emp_task == "" or emp_task_hour == "":
-                    print("Task file is incomplete! Please check the file before generating a meeting report.")
-                    return
-                else:
-                    try:
-                        if 1 <= int(emp_task_hour) <= 40:
-                            total_estimated_hour += int(emp_task_hour)
-                        else:
-                            print("Please check the file, some estimated hour values might be wrong.")
-                            return  
-                    except ValueError:
-                        print("Please check the file, some estimated hour values might be wrong.")
-                        return
-                    total_task_number += 1
-                    taskFile.readline()
-            if employeeNumber != total_task_number:
-                print("Please check the file, some tasks might be unfilled.")
-                return
-            else:
-                average_estimated_hour = total_estimated_hour / total_task_number
-        useTemp=False
-        with open(f"review_{departmentReportNumber}.txt","r") as temp:
-            if(temp.readline().strip()=="Rejected"):
-                temp.readline().strip()
-                temp.readline().strip()
-                temp.readline().strip()
-                tempDate=temp.readline().strip()
-                tempDescription=temp.readline().strip()
-                useTemp:bool=True
-            else:
-                pass
-        if(useTemp==True):
-            meeting_date = tempDate
-            meeting_note = tempDescription
-        else:
-            meeting_date = input("Please enter a date for the meeting. Use the format YYYY/MM/DD: ")
-            meeting_note = input("Please enter a note for the meeting: ")
-
-        with open(f"review_{departmentReportNumber}.txt", "w") as reviewFile:
-            reviewFile.write(f"Pending Approval\n-\n-\n-\n{meeting_date}\n{meeting_note}")
-        with open(f"meeting_report_{departmentReportNumber}.txt", "w") as reportFile:
-            reportFile.write(f"----- MEETING REPORT -----\n")
-            reportFile.write(f"Department: {departmentName}\nMeeting Date: {meeting_date}\nMeeting Note: {meeting_note}\nStatus: Pending Approval\nEmployee Task: \n")
-            try:
-                with open("employees.txt", "r") as employeeContentFile:
-                    with open(f"tasks_{departmentReportNumber}.txt", "r") as taskContentFile:
-                        while True:
-                            # Read one full record (6 lines)
-                            emp_content_id = employeeContentFile.readline().strip()
-                            if emp_content_id == "":# end of file reached
-                                break
-                            content_name = employeeContentFile.readline().strip()
-                            content_surname = employeeContentFile.readline().strip()
-                            content_title = employeeContentFile.readline().strip()
-                            content_dept = employeeContentFile.readline().strip()
-                            content_role = employeeContentFile.readline().strip()
-                            employeeContentFile.readline()
-                            if(content_dept!=departmentName):
-                                continue
-                            task_id = taskContentFile.readline().strip()
-                            task = taskContentFile.readline().strip()
-                            task_hour = taskContentFile.readline().strip()
-                            taskContentFile.readline()
-                            if content_dept == departmentName: # type: ignore
-                                reportFile.write(f"{emp_content_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}\n") # type:ignore
-                reportFile.write(f"Number of Employees: {employeeNumber}\nTotal Estimated Hours: {total_estimated_hour}\nAverage Estimated Hours: {average_estimated_hour:.2f}\n")
-                reportFile.write(f"Reviewer ID                  -   \nReviewer Name                -   \nReview Comment               -   ")
-            except FileNotFoundError:
-                print("Employee file not found!")
-            return
-        try:
-            #######
-            with open(f"meeting_report_{departmentReportNumber}.txt", "w") as regenerated_reportFile:
-                regenerated_reportFile.write(f"----- MEETING REPORT -----\n")
-                regenerated_reportFile.write(f"Department: {departmentName}\nMeeting Date: {meeting_date}\nMeeting Note: {meeting_note}\nStatus: Pending Approval\nEmployee Task: \n")
-                try:
-                    with open("employees.txt", "r") as employeeContentFile:
-                        with open(f"tasks_{departmentReportNumber}.txt", "r") as taskContentFile:
-                            while True:
-                                # Read one full record (6 lines)
-                                emp_content_id = employeeContentFile.readline().strip()
-                                if emp_content_id == "":# end of file reached
-                                    break
-                                content_name = employeeContentFile.readline().strip()
-                                content_surname = employeeContentFile.readline().strip()
-                                content_title = employeeContentFile.readline().strip()
-                                content_dept = employeeContentFile.readline().strip()
-                                content_role = employeeContentFile.readline().strip()
-                                employeeContentFile.readline()
-                                if(content_dept!=departmentName):
-                                    continue
-                                task_id = taskContentFile.readline().strip()
-                                task = taskContentFile.readline().strip()
-                                task_hour = taskContentFile.readline().strip()
-                                taskContentFile.readline()
-                                if content_dept == departmentName: # type: ignore
-                                    regenerated_reportFile.write(f"{emp_content_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}\n") # type:ignore
-
-                    regenerated_reportFile.write(f"Number of Employees: {employeeNumber}\nTotal Estimated Hours: {total_estimated_hour}\nAverage Estimated Hours: {average_estimated_hour:.2f}\n")
-                    regenerated_reportFile.write(f"Reviewer ID                  -   \nReviewer Name                -   \nReview Comment               -   ")
-                except FileNotFoundError:
-                    print("Employee file not found!")
-                return
-            with open(f"review_{departmentReportNumber}.txt", "w") as regenerated_reviewFile:
-                regenerated_reviewFile.write(f"Pending Approval\n-\n-\n-\n{meeting_date}\n{meeting_note}")
-
-        except:
-            pass
-        
-
-        
-    except FileNotFoundError:
-        print("There is no task assigned for this department yet.")
     return
 def display_meeting_report(department):
     # display the report or explain that none exists
@@ -466,4 +338,35 @@ def get_manager_name(manager_id):
             if(int(id)==manager_id):
                 fullName=name+" "+surname
                 return fullName
+def read_tasks():
+    return
+def review_status(department):
+    try:
+        with open(f"review_{department}") as file:
+            status=file.readline().strip()
+            if(status.lower()=="pending approval"):
+                return 0
+            elif(status.lower()=="approved"):
+                return 1
+            elif (status.lower()=="rejected"):
+                return -1
+    except FileNotFoundError:
+        return 2
+def meeting_report_status(department):
+    #5
+    try:
+        with open(f"meeting_report_{department}","r") as file:
+            file.readline()
+            file.readline()
+            file.readline()
+            file.readline()
+            status=file.readline()
+            if(status=="Status: Pending Approval"):
+                return 0
+            elif(status=="Status: Approved"):
+                return 1
+            elif(status=="Status: Rejected"):
+                return -1
+    except FileNotFoundError:
+        return 2
 main()
