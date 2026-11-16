@@ -15,7 +15,7 @@ def display_menu():
     elif(userMenuChoice==2):# pyright: ignore[reportPossiblyUnboundVariable] # 2. Assign weekly tasks 
         assign_weekly_tasks(select_department())
     elif(userMenuChoice==3):# type: ignore # 3. Generate meeting report 
-        generate_meeting_report(select_department(),read_tasks())
+        generate_meeting_report(select_department())
     elif(userMenuChoice==4): # type: ignore # 4. Display meeting report 
         display_meeting_report(select_department())
     elif(userMenuChoice==5):# 5. Review meeting report
@@ -59,6 +59,9 @@ def display_employees(department):
     return
 def assign_weekly_tasks(department):
     requestedDepartment = get_department_name(department)
+    if(meeting_report_status(department)!=-1):
+        print("Only rejected assaignments can be rewritten!")
+        return
     with open(f"tasks_{department}.txt", "w") as writeFile:
         try:
             with open("employees.txt", "r") as file:
@@ -87,6 +90,130 @@ def assign_weekly_tasks(department):
     #allow replacement of existing assaignments only after report rejection
     return 
 def generate_meeting_report(department):
+    tasksExists=tasks_n_existence(department)
+    departmentName=get_department_name(department)
+    if(tasksExists==-1):
+        print("Meeting reports can only be generated on already assinged tasks! Please assign tasks to the corresponding department first")
+        return
+    reportExists=meeting_report_status(department)
+    if(reportExists==2):#doesnt exist, free to proceed
+        review_date=input("Please provide a date for the meeting report.")
+        review_note=input("Please provide a note for the meeting report.")
+        with open(f"review_{department}.txt","w") as writeReview:
+            writeReview.write("Pending Approval\n")
+            writeReview.write("-\n")
+            writeReview.write("-\n")
+            writeReview.write("-\n")
+            writeReview.write(f"review_date.strip()\n")
+            writeReview.write(review_note.strip())
+        #write meeting_report_{department} here 
+        with open(f"meeting_report_{department}.txt","w") as writeReport:
+            writeReport.write("----- MEETING REPORT -----\n")
+            writeReport.write(f"Department:{departmentName}\n")
+            writeReport.write(f"Meeting Date:{review_date}\n")
+            writeReport.write(f"Meeting Note:{review_note}\n")
+            writeReport.write("Status: Pending Approval\n")
+            writeReport.write("Employee Tasks:\n")
+            with (open(f"tasks_{department}.txt","r") as tasksRead,
+                  open("employees.txt","r") as employeesRead):
+                while True:
+                    # Read one full record (6 lines)
+                    emp_content_id = employeesRead.readline().strip()
+                    if emp_content_id == "":# end of file reached
+                        break
+                    content_name = employeesRead.readline().strip()
+                    content_surname = employeesRead.readline().strip()
+                    content_title = employeesRead.readline().strip()
+                    content_dept = employeesRead.readline().strip()
+                    content_role = employeesRead.readline().strip()
+                    employeesRead.readline()
+                    if(content_dept!=departmentName):
+                        continue
+                    task_id = tasksRead.readline().strip()
+                    task = tasksRead.readline().strip()
+                    task_hour = tasksRead.readline().strip()
+                    tasksRead.readline()
+                    totalHours=0
+                    totalHours=totalHours+int(task_hour)
+                    averageHours=totalHours/get_employee_amount(department)    
+                    if content_dept == departmentName: # type: ignore
+                        writeReport.write(f"{emp_content_id} | ")
+                        writeReport.write(f"{content_name} | ")
+                        writeReport.write(f"{content_surname} | ")
+                        writeReport.write(f"{content_title} | ")
+                        writeReport.write(f"{task} | ")
+                        writeReport.write(f"{task_hour} |")
+                        writeReport.write("\n")
+                writeReport.write(f"Number of Employees:{get_employee_amount(department)}\n")
+                writeReport.write(f"Total estimated hours:{totalHours}\n") #type:ignore
+                writeReport.write(f"Average estimated hours:{averageHours:.2f}\n")#type:ignore
+                writeReport.write("Reviewer ID:-\nReviewer Name:-\nReviwer Comment:-")
+    elif(reportExists==0):#pending approval, no permission
+        print("Report already exists and is pending approval! Please try again later.")
+        return
+    elif(reportExists==1):# approved,no permission
+        print("Report already exsits and is approved! Please try again later.")
+        return
+    elif(reportExists==-1): # rejected, yes permission
+        while True:
+            confirmation=input("This report was rejected.Do you wish to proceed to override it? (Yes/No)")
+            if(confirmation.lower()=="yes" or confirmation.lower()=="no"):
+                if(confirmation.lower() == "yes"):
+                    break
+                else:
+                    print("Rejected to override, returning to main menu.")
+                    return
+            else:
+                print("Please enter a valid input")
+        #first save the old date and note
+        with open(f"meeting_report_{department}.txt","r")as oldRead:
+            #3-4
+            oldRead.readline()
+            oldRead.readline()
+            oldDate=oldRead.readline().strip()
+            oldNote=oldRead.readline().strip()
+        #the old code, again,without date and note
+        with (open(f"meeting_report_{department}.txt","w") as writeReport,
+              open(f"tasks_{department}.txt","r") as tasksRead,
+              open("employees.txt","r") as employeesRead):
+            writeReport.write("----- MEETING REPORT -----\n")
+            writeReport.write(f"Department:{departmentName}\n")
+            writeReport.write(f"{oldNote}\n")
+            writeReport.write(f"{oldDate}\n")
+            writeReport.write("Status: Pending Approval\n")
+            writeReport.write("Employee Tasks:\n")
+            while True:
+                # Read one full record (6 lines)
+                emp_content_id = employeesRead.readline().strip()
+                if emp_content_id == "":# end of file reached
+                    break
+                content_name = employeesRead.readline().strip()
+                content_surname = employeesRead.readline().strip()
+                content_title = employeesRead.readline().strip()
+                content_dept = employeesRead.readline().strip()
+                content_role = employeesRead.readline().strip()
+                employeesRead.readline()
+                if(content_dept!=departmentName):
+                    continue
+                task_id = tasksRead.readline().strip()
+                task = tasksRead.readline().strip()
+                task_hour = tasksRead.readline().strip()
+                tasksRead.readline()
+                totalHours=0
+                totalHours=totalHours+int(task_hour)
+                averageHours=totalHours/get_employee_amount(department)    
+                if content_dept == departmentName: # type: ignore
+                    writeReport.write(f"{emp_content_id} | ")
+                    writeReport.write(f"{content_name} | ")
+                    writeReport.write(f"{content_surname} | ")
+                    writeReport.write(f"{content_title} | ")
+                    writeReport.write(f"{task} | ")
+                    writeReport.write(f"{task_hour} |")
+                    writeReport.write("\n")
+            writeReport.write(f"Number of Employees:{get_employee_amount(department)}\n")
+            writeReport.write(f"Total estimated hours:{totalHours}\n") #type:ignore
+            writeReport.write(f"Average estimated hours:{averageHours:.2f}\n")#type:ignore
+            writeReport.write("Reviewer ID:-\nReviewer Name:-\nReviwer Comment:-")
     return
 def display_meeting_report(department):
     # display the report or explain that none exists
@@ -121,8 +248,9 @@ def authenticate_manager(manager_id, password, department):
                 dept = file.readline().strip()
                 role = file.readline().strip()
                 file.readline()  # empty line between records
-                if emp_id == manager_id and role == "Manager" and dept == department_name:
-                    is_valid_manager = True
+                if int(emp_id) == int(manager_id) and role == "Manager" and dept == department_name:
+                    is_valid_manager = True,
+                    break
     except FileNotFoundError:
         print("The employees file was not found!")
         return False
@@ -135,91 +263,60 @@ def authenticate_manager(manager_id, password, department):
                     break
                 file_password = file.readline().strip()
                 file.readline()  # empty line between records
-                if file_id == manager_id and file_password == password:
+                if int(file_id) == manager_id and file_password == password:
                     password_matches = True
+                    break
     except FileNotFoundError:
         print("The manager passwords file was not found!")
         return False
     # Both checks must pass
     return is_valid_manager and password_matches
 def review_meeting_report(department):
-    review_file_name = f"review_{department}.txt"
-    # Read review file to check status and preserve meeting date/note
-    try:
-        with open(review_file_name, "r") as file:
-            status = file.readline().strip()
-            file.readline()  # reviewer id
-            file.readline()  # reviewer name
-            file.readline()  # comment
-            meeting_date = file.readline().strip()
-            meeting_note = file.readline().strip()
-    except FileNotFoundError:
-        print("No meeting report exists for this department yet.")
+    emptyString=""
+    rejectionNote=""
+    if(meeting_report_status==2):
+        print("Report not found! Returning to main menu.")
         return
-    # Only Pending Approval reports can be reviewed
-    if status != "Pending Approval":
-        print(f"This report is already {status}.")
+    elif(meeting_report_status==-1):
+        print("Report is already rejected! Override it to continue.Returning to main menu.")
         return
-    # Manager login - 3 attempts
-    while(login_manager_handler()==False):
-        manager_id=login_manager_handler()
-    # Get reviewer full name from employees.txt
-    reviewer_name = ""
-    try:
-        with open("employees.txt", "r") as file:
-            while True:
-                emp_id = file.readline().strip()
-                if emp_id == "":
-                    break
-                name = file.readline().strip()
-                surname = file.readline().strip()
-                file.readline()  # title
-                file.readline()  # department
-                file.readline()  # role
-                file.readline()  # empty line
-                if emp_id == manager_id: #type: ignore
-                    reviewer_name = name + " " + surname
-    except FileNotFoundError:
-        print("The employees file was not found!")
+    elif(meeting_report_status==1):
+        print("Report is already approved.Returning to main menu.")
         return
-    # Display the current report
-    try:
-        with open(f"meeting_report_{department}.txt", "r") as file:
-            while True:
-                line = file.readline()
-                if line == "":
-                    break
-                print(line, end="")
-    except FileNotFoundError:
-        print("Meeting report file not found!")
+    manager_id=login_manager_handler()
+    manager_name=get_manager_name(manager_id)  
+    display_meeting_report(department)
+    while True:
+        try:
+            choice=int(input("Please enter what do you want to do with the report.1 for approval,2 for rejection,3 for cancellation."))
+            break
+        except ValueError:
+            print("Please give a proper input.")
+    if(choice==3):
+        print("Cancelled,returning to main menu.")
         return
-    # Ask for decision
-    print("\n1. Approve  2. Reject  3. Cancel")
-    decision = input("Enter your decision (1-3): ")
-    if decision == "1":
-        comment = input("Enter approval comment (or press Enter to skip): ")
-        if comment.strip() == "":
-            comment = "-"
-        new_status = "Approved"
-    elif decision == "2":
-        comment = ""
-        while comment.strip() == "":
-            comment = input("Enter rejection comment (required): ")
-            if comment.strip() == "":
-                print("Rejection comment cannot be empty!")
-        new_status = "Rejected"
-    else:
-        print("No changes made.")
-        return
-# Save updated review file
-    with open(review_file_name, "w") as file:
-        file.write(new_status + "\n")
-        file.write(manager_id + "\n") #type: ignore
-        file.write(reviewer_name + "\n")
-        file.write(comment + "\n")
-        file.write(meeting_date + "\n")
-        file.write(meeting_note + "\n")
-    print(f"Report {new_status.lower()} successfully.")
+    elif(choice==2):
+        while(rejectionNote == emptyString):
+            rejectionNote=input("Please enter a rejection comment.Do not leave a blank message.")
+        with open(f"review_{department}.txt","r")as reviewRead:
+            reviewRead.readline()
+            reviewRead.readline()
+            reviewRead.readline()
+            reviewRead.readline()
+            oldDate=reviewRead.readline()
+            oldNote=reviewRead.readline()
+        with open(f"review_{department}.txt","w")as reviewWrite:
+            reviewWrite.write("Rejected")
+            reviewWrite.write(f"{manager_id}")
+            reviewWrite.write(f"{manager_name}")
+            reviewWrite.write(f"{rejectionNote}")
+            reviewWrite.write(f"{oldDate}")
+            reviewWrite.write(f"{oldNote}")
+        
+    elif(choice==1):
+        approvalNote=input("Please enter a approval comment.")
+    
+    return
 def display_task_summary(department):
     total_hours=0
     average_hours=0
@@ -279,7 +376,6 @@ def estimated_hours_validation():
             print("Estimated hours must be an integer! Please try again")
     return estimatedHours
 def get_employee_amount(department)->int:
-
     if department==1:
         return 10
     elif department==2:
@@ -320,7 +416,6 @@ def login_manager_handler():
         manager_id,password,department=get_manager_info()
         if authenticate_manager(manager_id, password, department):
             return manager_id
-        print("Invalid manager ID or password, or unauthorized department.")
         attempts=attempts+1
         print("Invalid manager ID or password, or unauthorized department.")
     print("No attempts remaining. Returning to menu.")
@@ -338,11 +433,9 @@ def get_manager_name(manager_id):
             if(int(id)==manager_id):
                 fullName=name+" "+surname
                 return fullName
-def read_tasks():
-    return
 def review_status(department):
     try:
-        with open(f"review_{department}") as file:
+        with open(f"review_{department}.txt") as file:
             status=file.readline().strip()
             if(status.lower()=="pending approval"):
                 return 0
@@ -355,12 +448,12 @@ def review_status(department):
 def meeting_report_status(department):
     #5
     try:
-        with open(f"meeting_report_{department}","r") as file:
+        with open(f"meeting_report_{department}.txt","r") as file:
             file.readline()
             file.readline()
             file.readline()
             file.readline()
-            status=file.readline()
+            status=file.readline().strip()
             if(status=="Status: Pending Approval"):
                 return 0
             elif(status=="Status: Approved"):
@@ -369,4 +462,13 @@ def meeting_report_status(department):
                 return -1
     except FileNotFoundError:
         return 2
+def tasks_n_existence(department):
+    try:
+        with open(f"tasks_{department}.txt","r")as file:
+            return 1
+    except FileNotFoundError:
+        return -1
+
+
+
 main()

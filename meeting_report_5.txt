@@ -1,20 +1,6 @@
 ----- MEETING REPORT -----
-Department: IT Operations
-Meeting Date: 9999/99/99
+Department:IT Operations
 Meeting Note: 1234
+Meeting Date: 9999/99/99
 Status: Pending Approval
-Employee Task: 
-1036 | Pelin Karaca | IT Operations Manager | 12 | 12
-1037 | Serkan Bozkurt | System Administrator | 12 | 12
-1038 | Gizem Tunc | Network Engineer | 12 | 21
-1039 | Hakan Ekinci | IT Support Specialist | 12 | 12
-1040 | Sena Isik | DevOps Engineer | 12 | 12
-1041 | Cem Erdogan | System Administrator | 21 | 21
-1042 | Aylin Toprak | IT Support Specialist | 12 | 21
-1043 | Bora Sezer | Network Engineer | 21 | 12
-Number of Employees: 8
-Total Estimated Hours: 123
-Average Estimated Hours: 15.38
-Reviewer ID                  -   
-Reviewer Name                -   
-Review Comment               -   
+Employee Tasks:

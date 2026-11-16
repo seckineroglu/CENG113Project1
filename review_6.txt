@@ -2,5 +2,5 @@ Pending Approval
 -
 -
 -
-3131/31/31
-asdasdasfg
+review_date.strip()
+arda
