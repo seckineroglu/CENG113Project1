@@ -1,27 +1,36 @@
 def display_menu():
-    #display the main menu
+    #Display the main menu
     while True:
         try:
             print("1-)Display Employees\n2-)Assign Weekly Tasks\n3-)Generate Meeting Report\n4-)Display Meeting Report\n5-)Review Meeting Report\n6-)Display Task Summary\n0-)Exit")
-            userMenuChoice:int=int(input("Please choose an option to display:"))
+            userMenuChoice:int=int(input("Please choose an option to display: "))
             break
+
         except ValueError:
             print("Choice must be an integer!Please try again.")
+
     if(userMenuChoice==0):# type: ignore # 0. Exit
         print("Exiting the program.")
         return -1
+    
     elif(userMenuChoice==1):# type: ignore 1. Display department employees 
         display_employees(select_department())
+
     elif(userMenuChoice==2):# pyright: ignore[reportPossiblyUnboundVariable] # 2. Assign weekly tasks 
         assign_weekly_tasks(select_department())
+
     elif(userMenuChoice==3):# type: ignore # 3. Generate meeting report 
         generate_meeting_report(select_department())
+
     elif(userMenuChoice==4): # type: ignore # 4. Display meeting report 
         display_meeting_report(select_department())
+
     elif(userMenuChoice==5):# 5. Review meeting report
         review_meeting_report(select_department())
+
     elif(userMenuChoice==6): # Display task summary
         display_task_summary(select_department())
+
     else:
         print("Invalid menu number! Please try again.")
         return
@@ -32,8 +41,8 @@ def select_department():
     while True:
         try:
             chosenDepartment=int(input("Please select a department(1-6):"))
-            if 0 < chosenDepartment <= 6:
-                return chosenDepartment
+            if 0 < chosenDepartment <= 6: 
+                return chosenDepartment #Returning department number as an integer 
             else:
                 print("Department number must be between 1-6. Please try again.")
         except ValueError:
@@ -54,7 +63,7 @@ def display_employees(department):
                 dept = file.readline().strip()
                 role = file.readline().strip()
                 file.readline()
-                if(dept==requestedDepartment):
+                if(dept==requestedDepartment): # Checking whether the departments match
                     print(f"ID:{emp_id},Name:{name},Surname:{surname},Title:{title},Department:{dept},Role:{role}")
     except FileNotFoundError:
         print("The Employees file wasn't found!")
@@ -63,13 +72,13 @@ def display_employees(department):
 def assign_weekly_tasks(department):
     requestedDepartment = get_department_name(department)
 
-    if(meeting_report_status(department)!=-1):
+    if (meeting_report_status(department) == 0) or (meeting_report_status(department) == 1): # Assigning new tasks when the task file is waiting for approval or approved is prohibited 
         print("Only rejected assaignments can be rewritten!")
         return
     
     with open(f"tasks_{department}.txt", "w") as writeFile:
         try:
-            with open("employees.txt", "r") as file:
+            with open("employees.txt", "r") as file: # Pull employees datas from the text file, and write them to the tasks file 
                 while True:
                     # Read one full record (6 lines)
                     emp_id = file.readline().strip()
@@ -91,8 +100,10 @@ def assign_weekly_tasks(department):
                         writeFile.write("\n")
         except FileNotFoundError:
             print("The Employees file wasn't found!")
+
     #collect and save weekly tasks,,
     #allow replacement of existing assaignments only after report rejection
+
     return 
 
 def generate_meeting_report(department):
@@ -103,14 +114,16 @@ def generate_meeting_report(department):
     total_estimated_hour = 0
     total_task_number = 0
 
-    try:
-        with open(f"review_{departmentReportNumber}.txt", "r") as presentReviewFile:
+    try: # Try to find review file first. If file does not exist, write it first
+        with open(f"review_{departmentReportNumber}.txt", "r") as presentReviewFile: # Read the old review file
+
             status = presentReviewFile.readline().strip()
             presentReviewFile.readline()
             presentReviewFile.readline()
             old_meeting_date = presentReviewFile.readline().strip()
             old_meeting_note = presentReviewFile.readline().strip()
-            if status == "Rejected":
+
+            if status == "Rejected": # If the status is rejected, ask for confirmation to regenerate the meeting report.
                 print("This report is rejected.")
                 confirmation = input("Do you want to regenerate it with the current tasks? (y/n): ")
                 while True:
