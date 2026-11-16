@@ -1,7 +1,7 @@
 ----- MEETING REPORT -----
 Department: Software Development
-Meeting Date: 1221/12/12
-Meeting Note: asfsgddhd
+Meeting Date: 1212/12/12
+Meeting Note: 2131
 Status: Pending Approval
 Employee Task: 
 1001 | Deniz Kaya | Software Development Manager | asd | 11

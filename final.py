@@ -93,6 +93,7 @@ def generate_meeting_report(department):
     employeeNumber = get_employee_amount(department)
     total_estimated_hour = 0
     total_task_number = 0
+    
     try:
         with open(f"tasks_{departmentReportNumber}.txt", "r") as taskFile:
             while True:
@@ -121,8 +122,23 @@ def generate_meeting_report(department):
                 return
             else:
                 average_estimated_hour = total_estimated_hour / total_task_number
-        meeting_date = input("Please enter a date for the meeting. Use the format YYYY/MM/DD: ")
-        meeting_note = input("Please enter a note for the meeting: ")
+        useTemp=False
+        with open(f"review_{departmentReportNumber}.txt","r") as temp:
+            if(temp.readline().strip()=="Rejected"):
+                temp.readline().strip()
+                temp.readline().strip()
+                temp.readline().strip()
+                tempDate=temp.readline().strip()
+                tempDescription=temp.readline().strip()
+                useTemp:bool=True
+            else:
+                pass
+        if(useTemp==True):
+            meeting_date = tempDate
+            meeting_note = tempDescription
+        else:
+            meeting_date = input("Please enter a date for the meeting. Use the format YYYY/MM/DD: ")
+            meeting_note = input("Please enter a note for the meeting: ")
 
         with open(f"review_{departmentReportNumber}.txt", "w") as reviewFile:
             reviewFile.write(f"Pending Approval\n-\n-\n-\n{meeting_date}\n{meeting_note}")
@@ -151,28 +167,13 @@ def generate_meeting_report(department):
                             taskContentFile.readline()
                             if content_dept == departmentName: # type: ignore
                                 reportFile.write(f"{emp_content_id} | {content_name} {content_surname} | {content_title} | {task} | {task_hour}\n") # type:ignore
-
                 reportFile.write(f"Number of Employees: {employeeNumber}\nTotal Estimated Hours: {total_estimated_hour}\nAverage Estimated Hours: {average_estimated_hour:.2f}\n")
                 reportFile.write(f"Reviewer ID                  -   \nReviewer Name                -   \nReview Comment               -   ")
             except FileNotFoundError:
                 print("Employee file not found!")
             return
-        useTemp=False
         try:
-            with open(f"review_{departmentReportNumber}.txt","r") as temp:
-                if(temp.readline().strip()=="Rejected"):
-                    temp.readline()
-                    temp.readline()
-                    temp.readline()
-                    tempDate=temp.readline().strip()
-                    tempDescription=temp.readline().strip()
-                    useTemp:bool=True
-                else:
-                    pr
-                    #here !!!     
-            if(useTemp==True):
-                meeting_date = tempDate
-                meeting_note = tempDescription
+            #######
             with open(f"meeting_report_{departmentReportNumber}.txt", "w") as regenerated_reportFile:
                 regenerated_reportFile.write(f"----- MEETING REPORT -----\n")
                 regenerated_reportFile.write(f"Department: {departmentName}\nMeeting Date: {meeting_date}\nMeeting Note: {meeting_note}\nStatus: Pending Approval\nEmployee Task: \n")
@@ -288,19 +289,8 @@ def review_meeting_report(department):
         print(f"This report is already {status}.")
         return
     # Manager login - 3 attempts
-    attempts = 0
-    while attempts < 3:
-        manager_id = input("Enter your manager ID:")
-        password = input("Enter your password:")
-        if authenticate_manager(manager_id, password, department):
-            break
-        attempts += 1
-        if attempts < 3:
-            print("Invalid manager ID or password, or unauthorized department.")
-        else:
-            print("Invalid manager ID or password, or unauthorized department.")
-            print("No attempts remaining. Returning to menu.")
-            return
+    while(login_manager_handler()==False):
+        manager_id=login_manager_handler()
     # Get reviewer full name from employees.txt
     reviewer_name = ""
     try:
@@ -432,4 +422,48 @@ def get_employee_amount(department)->int:
         return 7
     else:
         return -1
+def get_manager_info():
+    while True:
+        try:
+            manager_id=int(input("Enter Manager ID:"))
+            break
+        except ValueError:
+            print("Manager ID must be an integer! Try again")
+    while True:
+        try:
+            manager_password=(input("Enter Manager Password:"))
+            break
+        except:
+            print("Couldn't process the password! Try again.")
+    while True:
+        try:
+            manager_department=int(input("Enter manager department as an integer(1-6)"))
+            break
+        except ValueError:
+            print("Manager Department must be an integer! Please try again.")
+    return manager_id,manager_password,manager_department
+def login_manager_handler():
+    attempts = 0
+    while attempts < 3:
+        manager_id,password,department=get_manager_info()
+        if authenticate_manager(manager_id, password, department):
+            return manager_id
+        print("Invalid manager ID or password, or unauthorized department.")
+        attempts=attempts+1
+        print("Invalid manager ID or password, or unauthorized department.")
+    print("No attempts remaining. Returning to menu.")
+    return -1
+def get_manager_name(manager_id):
+    with open("employees.txt","r")as file:
+        while True:
+            id=file.readline().strip()
+            name=file.readline().strip()
+            surname=file.readline().strip()
+            doesntmatter=file.readline().strip()
+            alsodoesntmatter=file.readline().strip()
+            role=file.readline
+            file.readline()#empty space between entries
+            if(int(id)==manager_id):
+                fullName=name+" "+surname
+                return fullName
 main()
