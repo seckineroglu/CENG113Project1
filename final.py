@@ -24,7 +24,7 @@ def display_menu():
         display_task_summary(select_department())
     else:
         print("Invalid menu number! Please try again.")
-        display_menu()
+        return
         
     return
 def select_department():
@@ -59,7 +59,7 @@ def display_employees(department):
     return
 def assign_weekly_tasks(department):
     requestedDepartment = get_department_name(department)
-    if(meeting_report_status(department)!=-1):
+    if((meeting_report_status(department)==0)or(meeting_report_status(department) ==1)): 
         print("Only rejected assaignments can be rewritten!")
         return
     with open(f"tasks_{department}.txt", "w") as writeFile:
@@ -104,8 +104,8 @@ def generate_meeting_report(department):
             writeReview.write("-\n")
             writeReview.write("-\n")
             writeReview.write("-\n")
-            writeReview.write(f"review_date.strip()\n")
-            writeReview.write(review_note.strip())
+            writeReview.write(f"{review_date.strip()}\n")
+            writeReview.write(f"{review_note.strip()}")
         #write meeting_report_{department} here 
         with open(f"meeting_report_{department}.txt","w") as writeReport:
             writeReport.write("----- MEETING REPORT -----\n")
@@ -274,13 +274,13 @@ def authenticate_manager(manager_id, password, department):
 def review_meeting_report(department):
     emptyString=""
     rejectionNote=""
-    if(meeting_report_status==2):
+    if(meeting_report_status(department)==2):
         print("Report not found! Returning to main menu.")
         return
-    elif(meeting_report_status==-1):
+    elif(meeting_report_status(department)==-1):
         print("Report is already rejected! Override it to continue.Returning to main menu.")
         return
-    elif(meeting_report_status==1):
+    elif(meeting_report_status(department)==1):
         print("Report is already approved.Returning to main menu.")
         return
     manager_id=login_manager_handler()
@@ -303,19 +303,115 @@ def review_meeting_report(department):
             reviewRead.readline()
             reviewRead.readline()
             reviewRead.readline()
-            oldDate=reviewRead.readline()
-            oldNote=reviewRead.readline()
+            oldDate=reviewRead.readline().strip()
+            oldNote=reviewRead.readline().strip()
         with open(f"review_{department}.txt","w")as reviewWrite:
-            reviewWrite.write("Rejected")
-            reviewWrite.write(f"{manager_id}")
-            reviewWrite.write(f"{manager_name}")
-            reviewWrite.write(f"{rejectionNote}")
-            reviewWrite.write(f"{oldDate}")
+            reviewWrite.write("Rejected\n")
+            reviewWrite.write(f"{manager_id}\n")
+            reviewWrite.write(f"{manager_name}\n")
+            reviewWrite.write(f"{rejectionNote}\n")
+            reviewWrite.write(f"{oldDate}\n")
             reviewWrite.write(f"{oldNote}")
-        
-    elif(choice==1):
-        approvalNote=input("Please enter a approval comment.")
+        with open(f"meeting_report_{department}.txt","w") as writeReport:
+            writeReport.write("----- MEETING REPORT -----\n")
+            writeReport.write(f"Department:{get_department_name(department)}\n")
+            writeReport.write(f"Meeting Date:{oldDate}\n")
+            writeReport.write(f"Meeting Note:{oldNote}\n")
+            writeReport.write("Status: Rejected\n")
+            writeReport.write("Employee Tasks:\n")
+            with (open(f"tasks_{department}.txt","r") as tasksRead,
+                    open("employees.txt","r") as employeesRead):
+                while True:
+                    # Read one full record (6 lines)
+                    emp_content_id = employeesRead.readline().strip()
+                    if emp_content_id == "":# end of file reached
+                        break
+                    content_name = employeesRead.readline().strip()
+                    content_surname = employeesRead.readline().strip()
+                    content_title = employeesRead.readline().strip()
+                    content_dept = employeesRead.readline().strip()
+                    content_role = employeesRead.readline().strip()
+                    employeesRead.readline()
+                    if(content_dept!=get_department_name(department)):
+                        continue
+                    task_id = tasksRead.readline().strip()
+                    task = tasksRead.readline().strip()
+                    task_hour = tasksRead.readline().strip()
+                    tasksRead.readline()
+                    totalHours=0
+                    totalHours=totalHours+int(task_hour)
+                    averageHours=totalHours/get_employee_amount(department)    
+                    if content_dept == get_department_name(department): # type: ignore
+                        writeReport.write(f"{emp_content_id} | ")
+                        writeReport.write(f"{content_name} | ")
+                        writeReport.write(f"{content_surname} | ")
+                        writeReport.write(f"{content_title} | ")
+                        writeReport.write(f"{task} | ")
+                        writeReport.write(f"{task_hour} |")
+                        writeReport.write("\n")
+                writeReport.write(f"Number of Employees:{get_employee_amount(department)}\n")
+                writeReport.write(f"Total estimated hours:{totalHours}\n") #type:ignore
+                writeReport.write(f"Average estimated hours:{averageHours:.2f}\n")#type:ignore
+                writeReport.write(f"Reviewer ID:{manager_id}\nReviewer Name:{get_manager_name(manager_id)}\nReviwer Comment:{rejectionNote}")
     
+    elif(choice==1):
+        approvalNote="None Given"
+        approvalNote=input("Please enter a approval comment.")
+        with open(f"review_{department}.txt","r")as reviewRead:
+            reviewRead.readline()
+            reviewRead.readline()
+            reviewRead.readline()
+            reviewRead.readline()
+            oldDate=reviewRead.readline().strip()
+            oldNote=reviewRead.readline().strip()
+        with open(f"review_{department}.txt","w")as reviewWrite:
+                reviewWrite.write("Approved\n")
+                reviewWrite.write(f"{manager_id}\n")
+                reviewWrite.write(f"{manager_name}\n")
+                reviewWrite.write(f"{approvalNote}\n")
+                reviewWrite.write(f"{oldDate}\n")
+                reviewWrite.write(f"{oldNote}")
+        with open(f"meeting_report_{department}.txt","w") as writeReport:
+            writeReport.write("----- MEETING REPORT -----\n")
+            writeReport.write(f"Department:{get_department_name(department)}\n")
+            writeReport.write(f"Meeting Date:{oldDate}\n")
+            writeReport.write(f"Meeting Note:{oldNote}\n")
+            writeReport.write("Status: Approved\n")
+            writeReport.write("Employee Tasks:\n")
+            with (open(f"tasks_{department}.txt","r") as tasksRead,
+                    open("employees.txt","r") as employeesRead):
+                while True:
+                    # Read one full record (6 lines)
+                    emp_content_id = employeesRead.readline().strip()
+                    if emp_content_id == "":# end of file reached
+                        break
+                    content_name = employeesRead.readline().strip()
+                    content_surname = employeesRead.readline().strip()
+                    content_title = employeesRead.readline().strip()
+                    content_dept = employeesRead.readline().strip()
+                    content_role = employeesRead.readline().strip()
+                    employeesRead.readline()
+                    if(content_dept!=get_department_name(department)):
+                        continue
+                    task_id = tasksRead.readline().strip()
+                    task = tasksRead.readline().strip()
+                    task_hour = tasksRead.readline().strip()
+                    tasksRead.readline()
+                    totalHours=0
+                    totalHours=totalHours+int(task_hour)
+                    averageHours=totalHours/get_employee_amount(department)    
+                    if content_dept == get_department_name(department): # type: ignore
+                        writeReport.write(f"{emp_content_id} | ")
+                        writeReport.write(f"{content_name} | ")
+                        writeReport.write(f"{content_surname} | ")
+                        writeReport.write(f"{content_title} | ")
+                        writeReport.write(f"{task} | ")
+                        writeReport.write(f"{task_hour} |")
+                        writeReport.write("\n")
+                writeReport.write(f"Number of Employees:{get_employee_amount(department)}\n")
+                writeReport.write(f"Total estimated hours:{totalHours}\n") #type:ignore
+                writeReport.write(f"Average estimated hours:{averageHours:.2f}\n")#type:ignore
+                writeReport.write(f"Reviewer ID:{manager_id}\nReviewer Name:{manager_name}\nReviwer Comment:{approvalNote}")
     return
 def display_task_summary(department):
     total_hours=0
@@ -367,8 +463,8 @@ def estimated_hours_validation():
     while True:
         try:
             estimatedHours=int(input("Please enter an estimate of required hours:"))
-            if (0 >= estimatedHours) or (40 > estimatedHours):
-                print("Please enter a number between 0 and 40!")
+            if (0 >= estimatedHours) or (estimatedHours > 40):
+                print("Please enter a number between 1 and 40!")
                 continue
             else:
                 break
@@ -421,16 +517,19 @@ def login_manager_handler():
     print("No attempts remaining. Returning to menu.")
     return -1
 def get_manager_name(manager_id):
-    with open("employees.txt","r")as file:
+    emptyString=""
+    with open("employees.txt","r") as file:
         while True:
-            id=file.readline().strip()
+            id = file.readline().strip()
+            if(id==emptyString): #end of the file reached
+                break
             name=file.readline().strip()
             surname=file.readline().strip()
             doesntmatter=file.readline().strip()
             alsodoesntmatter=file.readline().strip()
-            role=file.readline
-            file.readline()#empty space between entries
-            if(int(id)==manager_id):
+            role=file.readline()
+            arda=file.readline()#empty space between entries
+            if(int(id) == manager_id):
                 fullName=name+" "+surname
                 return fullName
 def review_status(department):

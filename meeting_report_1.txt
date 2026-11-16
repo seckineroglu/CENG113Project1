@@ -1,22 +1,22 @@
 ----- MEETING REPORT -----
-Department: Software Development
-Meeting Date: 1212/12/12
-Meeting Note: 2131
-Status: Pending Approval
-Employee Task: 
-1001 | Deniz Kaya | Software Development Manager | asd | 11
-1002 | Ayse Yilmaz | Backend Developer | asd | 11
-1003 | Emre Demir | Frontend Developer | asd | 33
-1004 | Selin Celik | Mobile Developer | qwrqrqw | 37
-1005 | Can Sahin | Software Developer | rfhdhfd | 11
-1006 | Ece Yildiz | Backend Developer | lllll | 20
-1007 | Burak Aydin | Frontend Developer | kkKKKk | 3
-1008 | Derya Arslan | Mobile Developer | lll | 7
-1009 | Mert Dogan | Software Developer | aann | 29
-1010 | Irem Kilic | Software Developer | asda | 21
-Number of Employees: 10
-Total Estimated Hours: 183
-Average Estimated Hours: 18.30
-Reviewer ID                  -   
-Reviewer Name                -   
-Review Comment               -   
+Department:Software Development
+Meeting Date:1344/12/33
+Meeting Note:arda
+Status: Approved
+Employee Tasks:
+1001 | Deniz | Kaya | Software Development Manager | Task1 | 1 |
+1002 | Ayse | Yilmaz | Backend Developer | Task2 | 2 |
+1003 | Emre | Demir | Frontend Developer | Task3 | 3 |
+1004 | Selin | Celik | Mobile Developer | Task4 | 4 |
+1005 | Can | Sahin | Software Developer | Task5 | 5 |
+1006 | Ece | Yildiz | Backend Developer | Task6 | 6 |
+1007 | Burak | Aydin | Frontend Developer | Task7 | 7 |
+1008 | Derya | Arslan | Mobile Developer | Task8 | 8 |
+1009 | Mert | Dogan | Software Developer | Task9 | 9 |
+1010 | Irem | Kilic | Software Developer | Task10 | 10 |
+Number of Employees:10
+Total estimated hours:10
+Average estimated hours:1.00
+Reviewer ID:1001
+Reviewer Name:Deniz Kaya
+Reviwer Comment:RONALDO

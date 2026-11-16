@@ -1,19 +1,19 @@
 ----- MEETING REPORT -----
 Department:Human Resources
+Meeting Date:arda
 Meeting Note:arda
-Meeting Date:2026/11/16
-Status: Pending Approval
+Status: Approved
 Employee Tasks:
-1044 | Simge | Altun | Human Resources Manager | 31 | 31 |
-1045 | Oguz | Duran | Recruitment Specialist | 31 | 31 |
-1046 | Beste | Uysal | HR Specialist | 31 | 31 |
-1047 | Yigit | Erol | Training Specialist | 31 | 31 |
-1048 | Ilayda | Genc | HR Specialist | 31 | 31 |
-1049 | Engin | Uzun | Recruitment Specialist | 31 | 31 |
-1050 | Lara | Yilmaz | Training Specialist | 31 | 31 |
+1044 | Simge | Altun | Human Resources Manager | Arda1 | 10 |
+1045 | Oguz | Duran | Recruitment Specialist | Arda2 | 11 |
+1046 | Beste | Uysal | HR Specialist | Arda3 | 12 |
+1047 | Yigit | Erol | Training Specialist | Arda4 | 13 |
+1048 | Ilayda | Genc | HR Specialist | Arda5 | 14 |
+1049 | Engin | Uzun | Recruitment Specialist | Arda6 | 15 |
+1050 | Lara | Yilmaz | Training Specialist | Arda7 | 16 |
 Number of Employees:7
-Total estimated hours:31
-Average estimated hours:4.43
-Reviewer ID:-
-Reviewer Name:-
-Reviwer Comment:-
+Total estimated hours:16
+Average estimated hours:2.29
+Reviewer ID:1044
+Reviewer Name:Simge Altun
+Reviwer Comment:SIUUUUUUU

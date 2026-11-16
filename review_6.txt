@@ -1,6 +1,6 @@
-Pending Approval
--
--
--
-review_date.strip()
+Approved
+1044
+Simge Altun
+SIUUUUUUU
+arda
 arda

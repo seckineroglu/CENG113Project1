@@ -1,6 +1,0 @@
------ MEETING REPORT -----
-Department:IT Operations
-Meeting Note: 1234
-Meeting Date: 9999/99/99
-Status: Pending Approval
-Employee Tasks:
