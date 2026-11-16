@@ -398,7 +398,7 @@ def estimated_hours_validation():
     while True:
         try:
             estimatedHours=int(input("Please enter an estimate of required hours:"))
-            if 0 > estimatedHours or estimatedHours > 40:
+            if (0 >= estimatedHours) or (40 > estimatedHours):
                 print("Please enter a number between 0 and 40!")
                 continue
             else:
