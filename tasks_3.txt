@@ -1,0 +1,32 @@
+1020
+Travel
+10
+
+1021
+Not travel
+20
+
+1022
+Maybe travel
+30
+
+1023
+Definitely not travel
+40
+
+1024
+Absolutely not travel
+10
+
+1025
+Perhaps travel
+20
+
+1026
+If and only if travel
+15
+
+1027
+Implied travel
+20
+

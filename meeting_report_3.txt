@@ -1,0 +1,20 @@
+----- MEETING REPORT -----
+Department:Research and Development
+Meeting Date:2023/08/20
+Meeting Note:Arasaka Tower down
+Status: Pending Approval
+Employee Tasks:
+1020 | Ceren | Polat | Research and Development Manager | Travel | 10 |
+1021 | Alp | Keskin | Research Engineer | Not travel | 20 |
+1022 | Melis | Ozturk | Research Engineer | Maybe travel | 30 |
+1023 | Ozan | Kaplan | Prototype Developer | Definitely not travel | 40 |
+1024 | Asli | Koc | Research Engineer | Absolutely not travel | 10 |
+1025 | Tolga | Avci | Innovation Specialist | Perhaps travel | 20 |
+1026 | Nehir | Sari | Prototype Developer | If and only if travel | 15 |
+1027 | Umut | Erdem | Research Engineer | Implied travel | 20 |
+Number of Employees:8
+Total estimated hours:165
+Average estimated hours:20.62
+Reviewer ID:-
+Reviewer Name:-
+Reviewer Comment:-

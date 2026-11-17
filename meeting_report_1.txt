@@ -1,0 +1,22 @@
+----- MEETING REPORT -----
+Department:Software Development
+Meeting Date:2026/11/11
+Meeting Note:Commemorated the train
+Status: Approved
+Employee Tasks:
+1001 | Deniz | Kaya | Software Development Manager | Cleaning out the Bureau | 10 |
+1002 | Ayse | Yilmaz | Backend Developer | Surveying the score | 15 |
+1003 | Emre | Demir | Frontend Developer | Developing the plan | 12 |
+1004 | Selin | Celik | Mobile Developer | The big one | 20 |
+1005 | Can | Sahin | Software Developer | The small one | 2 |
+1006 | Ece | Yildiz | Backend Developer | Take out the trash | 1 |
+1007 | Burak | Aydin | Frontend Developer | Uplift the spirits of the team | 5 |
+1008 | Derya | Arslan | Mobile Developer | Rerail the derailed train | 40 |
+1009 | Mert | Dogan | Software Developer | Go to Paleto Bank | 20 |
+1010 | Irem | Kilic | Software Developer | Follow the train | 15 |
+Number of Employees:10
+Total estimated hours:140
+Average estimated hours:14.00
+Reviewer ID:1001
+Reviewer Name:Deniz Kaya
+Reviewer Comment:Train has been commomerated

@@ -1,0 +1,40 @@
+1001
+Cleaning out the Bureau
+10
+
+1002
+Surveying the score
+15
+
+1003
+Developing the plan
+12
+
+1004
+The big one
+20
+
+1005
+The small one
+2
+
+1006
+Take out the trash
+1
+
+1007
+Uplift the spirits of the team
+5
+
+1008
+Rerail the derailed train
+40
+
+1009
+Go to Paleto Bank
+20
+
+1010
+Follow the train
+15
+

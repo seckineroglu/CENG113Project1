@@ -1,0 +1,21 @@
+----- MEETING REPORT -----
+Department:Artificial Intelligence
+Meeting Date:1999/09/09
+Meeting Note:Tasks were handled
+Status: Rejected
+Employee Tasks:
+1011 | Elif | Aksoy | AI Team Lead | Description1 | 1 |
+1012 | Kerem | Yalcin | AI Researcher | D2 | 2 |
+1013 | Zeynep | Eren | Machine Learning Engineer | D3 | 3 |
+1014 | Arda | Tekin | Data Scientist | D4 | 4 |
+1015 | Dila | Kurt | AI Researcher | D5 | 5 |
+1016 | Onur | Tas | Machine Learning Engineer | D6 | 6 |
+1017 | Naz | Bulut | Data Scientist | D7 | 7 |
+1018 | Berk | Gunes | AI Researcher | 8 | 8 |
+1019 | Sude | Acar | Data Engineer | D9 | 9 |
+Number of Employees:9
+Total estimated hours:45
+Average estimated hours:5.00
+Reviewer ID:1011
+Reviewer Name:Elif Aksoy
+Reviewer Comment:Tasks were not handled
