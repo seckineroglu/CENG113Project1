@@ -1,7 +1,8 @@
-#330201021
-#330201025
-#330201093
-#330201050
+#Numbers of the contributors:
+#330201021 Arda Derici
+#330201025 Seçkin Eroğlu
+#330201093 Ozan Karal
+#330201050 Deniz Kaan Akdal
 def display_menu():
     #display the main menu
     while True:
@@ -13,10 +14,10 @@ def display_menu():
             print("Choice must be an integer!Please try again.")
     if(userMenuChoice==0):# type: ignore # 0. Exit
         print("Exiting the program.")
-        return -1
+        return -1 #makes the control variable in main() -1, breaks the loop inside main()
     elif(userMenuChoice==1):# type: ignore 1. Display department employees 
         display_employees(select_department())
-    elif(userMenuChoice==2):# pyright: ignore[reportPossiblyUnboundVariable] # 2. Assign weekly tasks 
+    elif(userMenuChoice==2):# type: ignore # 2. Assign weekly tasks 
         assign_weekly_tasks(select_department())
     elif(userMenuChoice==3):# type: ignore # 3. Generate meeting report 
         generate_meeting_report(select_department())
@@ -29,9 +30,8 @@ def display_menu():
     else:
         print("Invalid menu number! Please try again.")
         return
-        
     return
-def select_department():
+def select_department(): #general purpose function to return a validated department number value 
     while True:
         try:
             chosenDepartment=int(input("Please select a department(1-6):"))
@@ -159,11 +159,11 @@ def generate_meeting_report(department):
                         writeReport.write(f"{content_title} | ")
                         writeReport.write(f"{task} | ")
                         writeReport.write(f"{task_hour} |")
-                        writeReport.write("\n")
+                        writeReport.write("\n") #employees and their tasks structure inside the document is made here
                 writeReport.write(f"Number of Employees:{get_employee_amount(department)}\n")
                 writeReport.write(f"Total estimated hours:{totalHours}\n") #type:ignore
                 writeReport.write(f"Average estimated hours:{averageHours:.2f}\n")#type:ignore
-                writeReport.write("Reviewer ID:-\nReviewer Name:-\nReviewer Comment:-")
+                writeReport.write("Reviewer ID:-\nReviewer Name:-\nReviewer Comment:-")#no one has reviewed it yet
     elif(reportExists==0):#pending approval, no permission
         print("Report already exists and is pending approval! Please try again later.")
         return
@@ -175,6 +175,7 @@ def generate_meeting_report(department):
             confirmation=input("This report was rejected.Do you wish to proceed to override it? (Yes/No)")
             if(confirmation.lower()=="yes" or confirmation.lower()=="no"):
                 if(confirmation.lower() == "yes"):
+                    print("Successfully overriden,returning to main menu.")
                     break
                 else:
                     print("Rejected to override, returning to main menu.")
@@ -186,7 +187,7 @@ def generate_meeting_report(department):
             readOldReview.readline().strip()
             readOldReview.readline().strip()
             readOldReview.readline().strip()
-            reviewOldDate=readOldReview.readline().strip()
+            reviewOldDate=readOldReview.readline().strip() #preserving the old note and date info
             reviewOldNote=readOldReview.readline().strip()
         with open(f"review_{department}.txt","w") as writeReview:
             writeReview.write("Pending Approval\n")
@@ -550,7 +551,7 @@ def login_manager_handler(givenDepartment):
         manager_id,password,department=get_manager_info()
         if authenticate_manager(manager_id, password, department):
             if(givenDepartment!=department):
-                return -2
+                return -2#is a manager,but not that departments manager
             return manager_id
         attempts=attempts+1
         print("Invalid manager ID or password, or unauthorized department.")
