@@ -567,7 +567,4 @@ def tasks_n_existence(department):
             return 1
     except FileNotFoundError:
         return -1
-
-
-
 main()
