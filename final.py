@@ -11,7 +11,7 @@ def display_menu():
             break
         except ValueError:
             print("Choice must be an integer!Please try again.")
-    if(userMenuChoice==0):# type: ignore # 0. Exit
+    if(userMenuChoice==0):# type: ignore # 0. Exits
         print("Exiting the program.")
         return -1
     elif(userMenuChoice==1):# type: ignore 1. Display department employees 
