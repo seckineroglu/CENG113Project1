@@ -1,22 +1,22 @@
 ----- MEETING REPORT -----
 Department:Software Development
-Meeting Date:1344/12/33
+Meeting Date:1111/11/11
 Meeting Note:arda
-Status: Approved
+Status: Pending Approval
 Employee Tasks:
-1001 | Deniz | Kaya | Software Development Manager | Task1 | 1 |
-1002 | Ayse | Yilmaz | Backend Developer | Task2 | 2 |
-1003 | Emre | Demir | Frontend Developer | Task3 | 3 |
-1004 | Selin | Celik | Mobile Developer | Task4 | 4 |
-1005 | Can | Sahin | Software Developer | Task5 | 5 |
-1006 | Ece | Yildiz | Backend Developer | Task6 | 6 |
-1007 | Burak | Aydin | Frontend Developer | Task7 | 7 |
-1008 | Derya | Arslan | Mobile Developer | Task8 | 8 |
-1009 | Mert | Dogan | Software Developer | Task9 | 9 |
-1010 | Irem | Kilic | Software Developer | Task10 | 10 |
+1001 | Deniz | Kaya | Software Development Manager | 11 | 11 |
+1002 | Ayse | Yilmaz | Backend Developer | 1 | 11 |
+1003 | Emre | Demir | Frontend Developer | 11 | 11 |
+1004 | Selin | Celik | Mobile Developer | 11 | 11 |
+1005 | Can | Sahin | Software Developer | 11 | 11 |
+1006 | Ece | Yildiz | Backend Developer | 11 | 11 |
+1007 | Burak | Aydin | Frontend Developer | 11 | 11 |
+1008 | Derya | Arslan | Mobile Developer | 11 | 11 |
+1009 | Mert | Dogan | Software Developer | 11 | 11 |
+1010 | Irem | Kilic | Software Developer | 11 | 11 |
 Number of Employees:10
-Total estimated hours:10
-Average estimated hours:1.00
-Reviewer ID:1001
-Reviewer Name:Deniz Kaya
-Reviwer Comment:RONALDO
+Total estimated hours:110
+Average estimated hours:11.00
+Reviewer ID:-
+Reviewer Name:-
+Reviwer Comment:-
